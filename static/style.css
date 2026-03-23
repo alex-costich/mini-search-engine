@@ -1,0 +1,377 @@
+/* -----------------------------------------------------------------------
+   style.css — Terraria Search Engine
+   Theme: dark pixel-art / retro game aesthetic
+   Fonts: Press Start 2P (display) + Share Tech Mono (body)
+----------------------------------------------------------------------- */
+
+:root {
+    --bg:           #0d0f12;
+    --surface:      #141820;
+    --surface2:     #1c2430;
+    --border:       #2a3a4a;
+    --border-glow:  #4ade8055;
+    --accent:       #4ade80;      /* Terraria green */
+    --accent2:      #facc15;      /* gold */
+    --accent3:      #38bdf8;      /* sky blue */
+    --danger:       #f87171;
+    --text:         #e2e8f0;
+    --text-muted:   #64748b;
+    --text-dim:     #94a3b8;
+    --pixel:        1px;
+    --radius:       0px;          /* hard edges, pixel style */
+  }
+  
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* ── Background canvas ── */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  
+  /* ── Layout ── */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border);
+  }
+  
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .logo-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 8px var(--accent));
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+  
+  .logo-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent), 2px 2px 0 #0a1a0a;
+    letter-spacing: 1px;
+  }
+  
+  .logo-sub {
+    color: var(--accent2);
+    font-size: 0.6rem;
+    text-shadow: 0 0 12px var(--accent2), 1px 1px 0 #1a1200;
+  }
+  
+  /* ── Stats pills ── */
+  .index-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .stat-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.75rem;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+  
+  .stat-pill strong { color: var(--accent3); }
+  
+  /* ── Search box ── */
+  .search-wrapper {
+    margin-bottom: 1rem;
+  }
+  
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    transition: border-color 0.2s;
+    margin-bottom: 0.75rem;
+  }
+  
+  .search-box:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--border-glow);
+  }
+  
+  .search-icon {
+    padding: 0 0.75rem;
+    font-size: 1rem;
+    user-select: none;
+  }
+  
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0.9rem 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: var(--text);
+    caret-color: var(--accent);
+  }
+  
+  .search-input::placeholder { color: var(--text-muted); }
+  
+  .search-btn {
+    background: var(--accent);
+    color: #0d0f12;
+    border: none;
+    padding: 0.9rem 1.4rem;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.55rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.15s, transform 0.1s;
+  }
+  
+  .search-btn:hover  { background: #86efac; }
+  .search-btn:active { transform: scale(0.97); }
+  
+  /* ── Filters ── */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  
+  .filter-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.3rem 0.75rem;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.45rem;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+  }
+  
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--surface);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 8px var(--border-glow);
+  }
+  
+  /* ── Suggestion bar ── */
+  .suggestion-bar {
+    background: #1a1500;
+    border: 1px solid var(--accent2);
+    padding: 0.6rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--accent2);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .suggestion-link {
+    background: none;
+    border: none;
+    color: var(--accent2);
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  
+  .suggestion-link:hover { color: #fde68a; }
+  
+  /* ── Search meta ── */
+  .search-meta {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding-left: 2px;
+  }
+  
+  /* ── Results grid ── */
+  .results-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  
+  /* ── Result card ── */
+  .result-card {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 1.1rem 1.25rem;
+    position: relative;
+    animation: slideIn 0.25s ease both;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  
+  .result-card:nth-child(even) { background: var(--surface2); }
+  
+  .result-card:hover {
+    background: #182230;
+    border-left-color: var(--accent2);
+  }
+  
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  
+  .result-card:nth-child(1) { animation-delay: 0.00s; }
+  .result-card:nth-child(2) { animation-delay: 0.04s; }
+  .result-card:nth-child(3) { animation-delay: 0.08s; }
+  .result-card:nth-child(4) { animation-delay: 0.12s; }
+  .result-card:nth-child(5) { animation-delay: 0.16s; }
+  
+  .result-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .result-rank {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.45rem;
+    color: var(--text-muted);
+    min-width: 1.5rem;
+  }
+  
+  .result-title {
+    flex: 1;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    color: var(--accent3);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  
+  .result-title:hover { color: #7dd3fc; text-decoration: underline; }
+  
+  .result-badges {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  
+  .badge-category {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.38rem;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid;
+    letter-spacing: 0.5px;
+  }
+  
+  .badge-category.Boss     { color: var(--danger);  border-color: var(--danger);  background: #1a0808; }
+  .badge-category.Biome    { color: var(--accent);  border-color: var(--accent);  background: #081a0c; }
+  .badge-category.Weapon   { color: var(--accent2); border-color: var(--accent2); background: #1a1408; }
+  .badge-category.Event    { color: #c084fc;        border-color: #c084fc;        background: #120818; }
+  .badge-category.Mechanic { color: var(--accent3); border-color: var(--accent3); background: #08101a; }
+  .badge-category.General  { color: var(--text-dim); border-color: var(--border); background: transparent; }
+  
+  .badge-score {
+    font-size: 0.7rem;
+    color: var(--accent2);
+    background: #1a1200;
+    border: 1px solid #3a2a00;
+    padding: 0.1rem 0.4rem;
+  }
+  
+  .result-snippet {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .result-url {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+  }
+  
+  .result-url a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  
+  .result-url a:hover { color: var(--accent3); }
+  
+  /* ── Empty / no results states ── */
+  .empty-state,
+  .no-results {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  
+  .empty-hint {
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  
+  .empty-hint em { color: var(--accent3); font-style: normal; }
+  
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar       { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  
+  /* ── Animations ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
