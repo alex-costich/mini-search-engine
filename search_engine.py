@@ -28,15 +28,11 @@ STOP_WORDS = {
     "your", "its", "one", "two", "three", "new", "use", "used", "using",
 }
 
-
-# STEMMER (Porter-lite, suffix stripping)
-
 def stem(word: str) -> str:
-    """Lightweight suffix stemmer (no external dependencies)."""
     if len(word) <= 3:
         return word
 
-    # Step 1: plurals and -ed/-ing
+    # plurals and -ed/-ing
     if word.endswith("sses"):
         word = word[:-2]
     elif word.endswith("ies"):
@@ -46,7 +42,7 @@ def stem(word: str) -> str:
     elif word.endswith("s") and not word.endswith("ss"):
         word = word[:-1]
 
-    # Step 2: -ed / -ing
+    # -ed / -ing
     if word.endswith("eed"):
         pass
     elif word.endswith("ed") and len(word) > 4:
@@ -54,7 +50,7 @@ def stem(word: str) -> str:
     elif word.endswith("ing") and len(word) > 5:
         word = word[:-3]
 
-    # Step 3: -ational → -ate, -ization → -ize, -ness/-ment/-ful
+    # -ational → -ate, -ization → -ize, -ness/-ment/-ful
     suffixes = [
         ("ational", "ate"), ("tional", "tion"), ("ization", "ize"),
         ("fulness", "ful"), ("ousness", "ous"), ("iveness", "ive"),
@@ -69,8 +65,6 @@ def stem(word: str) -> str:
     return word
 
 
-# TEXT PROCESSING PIPELINE
-
 def tokenize(text: str) -> list:
     """Lowercase, extract alpha tokens, remove stopwords, stem."""
     tokens = re.findall(r"[a-z]+", text.lower())
@@ -78,18 +72,15 @@ def tokenize(text: str) -> list:
 
 
 def tokenize_raw(text: str) -> list:
-    """Tokenize without stemming — used for spell correction vocab."""
+    """Tokenize without stemming (used for spell correction vocab)."""
     return [t for t in re.findall(r"[a-z]+", text.lower())
             if t not in STOP_WORDS and len(t) > 1]
-
-
-# INVERTED INDEX
 
 class InvertedIndex:
     def __init__(self):
         # term → {doc_id: frequency}
         self.index: dict[str, dict[str, int]] = defaultdict(dict)
-        self.doc_lengths: dict[str, int] = {}   # doc_id → token count
+        self.doc_lengths: dict[str, int] = {}   # doc_id → token, count
         self.doc_meta: dict[str, dict] = {}      # doc_id → {title, url, text, category}
         self.vocab: set = set()                  # unstemmed vocabulary for spell correction
         self.total_docs: int = 0
@@ -135,9 +126,14 @@ class InvertedIndex:
     @property
     def vocab_size(self) -> int:
         return len(self.index)
+    
+# t t t
 
+# t - term - token
 
-# BM25 SCORING
+# tf -> more appearances in one doc, higher relevance against others
+# idf -> less appearances across doc, higher relevance (more appearances, less relevance)
+# dln -> longer documents have more terms but are not necessarily more relevant
 
 class BM25:
     def __init__(self, index: InvertedIndex, k1: float = 1.5, b: float = 0.75):
@@ -206,7 +202,16 @@ class BM25:
         return results
 
 
-# SPELL CORRECTION (Levenshtein)
+# SPELL CORRECTION
+"""
+Levenshtein distance measures:
+How many edits are needed to turn one word into another
+
+Allowed edits:
+insert a letter
+delete a letter
+replace a letter
+"""
 
 def levenshtein(a: str, b: str) -> int:
     """Compute edit distance between two strings."""
@@ -233,7 +238,7 @@ def levenshtein(a: str, b: str) -> int:
     return prev[len(b)]
 
 
-def spell_correct(query: str, vocab: set, max_distance: int = 2) -> Optional[str]:
+def spell_correct(query: str, vocab: set, max_distance: int = 3) -> Optional[str]:
     """
     For each query term not in vocab, find the closest vocab word.
     Returns a corrected query string, or None if no corrections needed.
@@ -328,6 +333,8 @@ class SearchEngine:
         }
 
 
+
+
 # TEST
 
 if __name__ == "__main__":
@@ -344,8 +351,8 @@ if __name__ == "__main__":
         "how to defeat moon lord",
         "best sword weapon hardmode",
         "corruption biome enemies",
-        "terrablade crafting",       # typo — should suggest terra blade
-        "skelton boss",              # typo — should suggest skeletron
+        "terrablade crafting",       # should suggest terra blade
+        "skelton boss",              # should suggest skeletron
     ]
 
     print("\n--- Search Tests ---")
