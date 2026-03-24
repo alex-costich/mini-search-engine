@@ -5,86 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terraria Search</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
 
-  <!-- Animated pixel background -->
-  <canvas id="bg-canvas"></canvas>
-
-  <div class="container">
-
-    <!-- Header -->
-    <header class="header">
-      <div class="logo-block">
-        <span class="logo-icon">⛏️</span>
-        <h1 class="logo-title">TERRARIA<br><span class="logo-sub">SEARCH ENGINE</span></h1>
-      </div>
-      <div class="index-stats" id="index-stats">
-        <span class="stat-pill">📄 <strong>{{ stats.total_docs }}</strong> docs</span>
-        <span class="stat-pill">🔤 <strong>{{ stats.vocab_size }}</strong> terms</span>
-        <span class="stat-pill">📏 avg <strong>{{ stats.avg_doc_length }}</strong> tokens</span>
-      </div>
-    </header>
-
-    <!-- Search bar -->
-    <div class="search-wrapper">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="search-input"
-          class="search-input"
-          placeholder="Search bosses, biomes, weapons..."
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <button class="search-btn" id="search-btn">SEARCH</button>
-      </div>
-
-      <!-- Category filters -->
-      <div class="filters">
-        <button class="filter-btn active" data-cat="">ALL</button>
-        <button class="filter-btn" data-cat="Boss">⚔️ BOSS</button>
-        <button class="filter-btn" data-cat="Biome">🌿 BIOME</button>
-        <button class="filter-btn" data-cat="Weapon">🗡️ WEAPON</button>
-        <button class="filter-btn" data-cat="Event">🌙 EVENT</button>
-        <button class="filter-btn" data-cat="Mechanic">⚙️ MECHANIC</button>
-      </div>
-    </div>
-
-    <!-- Spell correction suggestion -->
-    <div class="suggestion-bar" id="suggestion-bar" style="display:none;">
-      <span class="suggestion-text">
-        Did you mean: <button class="suggestion-link" id="suggestion-link"></button>?
-      </span>
-    </div>
-
-    <!-- Search meta (time + count) -->
-    <div class="search-meta" id="search-meta" style="display:none;">
-      <span id="meta-text"></span>
-    </div>
-
-    <!-- Results -->
-    <div class="results-grid" id="results-grid"></div>
-
-    <!-- Empty state -->
-    <div class="empty-state" id="empty-state">
-      <div class="empty-icon">🧱</div>
-      <p>Type a query to begin your search.</p>
-      <p class="empty-hint">Try: <em>moon lord</em>, <em>corruption biome</em>, <em>zenith crafting</em></p>
-    </div>
-
-    <!-- No results -->
-    <div class="no-results" id="no-results" style="display:none;">
-      <div class="empty-icon">💀</div>
-      <p>No results found.</p>
-      <p class="empty-hint">Check spelling or try a different query.</p>
-    </div>
-
+  <div class="wiki-banner">
+    <img
+      src="/static/images/logo.png"
+      alt="Terraria"
+      class="wiki-logo"
+    />
   </div>
 
+  <div class="grass-border"></div>
+
+  <div class="wiki-layout">
+    <aside class="wiki-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Search Engine</div>
+        <ul class="sidebar-links">
+          <li>📄 {{ stats.total_docs }} Documents</li>
+          <li>🔤 {{ stats.vocab_size }} Terms</li>
+          <li>📏 Avg {{ stats.avg_doc_length }} tokens</li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Categories</div>
+        <ul class="sidebar-links filters">
+          <li class="filter-btn active" data-cat="">All Pages</li>
+          <li class="filter-btn" data-cat="Boss">⚔️ Bosses</li>
+          <li class="filter-btn" data-cat="Biome">🌿 Biomes</li>
+          <li class="filter-btn" data-cat="Weapon">🗡️ Weapons</li>
+          <li class="filter-btn" data-cat="Armor">🛡️ Armor</li>
+          <li class="filter-btn" data-cat="NPC">🧑 NPCs</li>
+          <li class="filter-btn" data-cat="Accessory">💍 Accessories</li>
+          <li class="filter-btn" data-cat="Event">🌙 Events</li>
+          <li class="filter-btn" data-cat="Mechanic">⚙️ Mechanics</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="wiki-main">
+
+      <div class="wiki-page-header">
+        <h1 class="wiki-page-title">Terraria Wiki</h1>
+        <div class="wiki-page-tabs">
+          <span class="tab active">Search</span>
+        </div>
+      </div>
+
+      <div class="wiki-search-section">
+        <div class="wiki-search-box">
+          <input
+            type="text"
+            id="search-input"
+            class="wiki-search-input"
+            placeholder="Search the Terraria wiki..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="wiki-search-btn" id="search-btn">Search</button>
+        </div>
+      </div>
+
+      <div class="wiki-notice" id="suggestion-bar" style="display:none;">
+        <span class="suggestion-text">
+          Did you mean: <button class="suggestion-link" id="suggestion-link"></button>?
+        </span>
+      </div>
+
+      <div class="wiki-meta" id="search-meta" style="display:none;">
+        <span id="meta-text"></span>
+      </div>
+
+      <div id="results-grid"></div>
+
+      <div id="empty-state" class="wiki-welcome">
+        <div class="wiki-welcome-inner">
+          <p>Welcome to the <b>Terraria Search Engine</b>, a comprehensive search tool for Terraria wiki articles.</p>
+          <p style="margin-top:0.75rem;">Use the search bar above to find articles on bosses, biomes, weapons, NPCs, and more.</p>
+          <div class="wiki-suggestions">
+            <span class="wiki-suggest-label">Try searching:</span>
+            <span class="wiki-suggest-tag" onclick="quickSearch('moon lord')">moon lord</span>
+            <span class="wiki-suggest-tag" onclick="quickSearch('corruption biome')">corruption biome</span>
+            <span class="wiki-suggest-tag" onclick="quickSearch('zenith crafting')">zenith crafting</span>
+            <span class="wiki-suggest-tag" onclick="quickSearch('hardmode bosses')">hardmode bosses</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="no-results" class="wiki-no-results" style="display:none;">
+        <p>No results found. Check spelling or try a different query.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="grass-border bottom"></div>
+
   <script src="/static/main.js"></script>
+  <script>
+    function quickSearch(q) {
+      document.getElementById('search-input').value = q;
+      document.getElementById('search-btn').click();
+    }
+  </script>
 </body>
 </html>
