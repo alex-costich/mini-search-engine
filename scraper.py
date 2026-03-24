@@ -17,26 +17,41 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 BASE_URL = "https://terraria.wiki.gg/wiki/"
 
-# Original 32
-ORIGINAL_PAGES = [
+PAGES = [
+
+    # Bosses
     "Eye_of_Cthulhu", "Eater_of_Worlds", "Brain_of_Cthulhu", "Skeletron",
     "Wall_of_Flesh", "The_Twins", "The_Destroyer", "Skeletron_Prime",
     "Plantera", "Golem", "Duke_Fishron", "Moon_Lord", "Queen_Bee",
-    "The_Corruption", "The_Crimson", "The_Hallow", "Underground_Jungle",
-    "Desert", "Tundra", "Ocean",
-    "Zenith", "Terra_Blade", "Meowmere", "Megashark", "Last_Prism",
-    "Copper_Shortsword",
-    "Hardmode", "Blood_Moon", "Solar_Eclipse", "Goblin_Army",
-    "Journey_Mode", "Terraria",
-]
-
-# 113 new pages
-NEW_PAGES = [
-    # More Bosses
     "King_Slime", "Deerclops", "Queen_Slime", "Empress_of_Light",
     "Lunatic_Cultist", "Dark_Mage", "Ogre", "Betsy",
     "Flying_Dutchman", "Mourning_Wood", "Pumpking", "Ice_Queen",
     "Santa-NK1", "Everscream",
+
+    # Biomes
+    "The_Corruption", "The_Crimson", "The_Hallow", "Underground_Jungle",
+    "Desert", "Tundra", "Ocean", "Underground", "Cavern",
+    "The_Underworld", "Space", "Dungeon", "Jungle",
+    "Mushroom_biome", "Granite_Cave", "Marble_Cave",
+
+    # Weapons
+    "Zenith", "Terra_Blade", "Meowmere", "Megashark", "Last_Prism",
+    "Copper_Shortsword", "Night's_Edge", "Excalibur", "True_Excalibur",
+    "True_Night's_Edge", "Death_Sickle", "Vampire_Knives",
+    "Scourge_of_the_Corruptor", "Piranha_Gun", "Snowball_Cannon",
+    "Flamethrower", "Clockwork_Assault_Rifle", "Uzi", "Chain_Gun",
+    "Golden_Shower", "Crystal_Storm", "Blizzard_Staff",
+    "Razorblade_Typhoon", "Bubble_Gun", "Nimbus_Rod",
+    "Bat_Scepter", "Terraprisma", "Phantasm",
+    "Influx_Waver", "Star_Wrath", "Tsunami",
+
+    # Armor
+    "Molten_armor", "Meteor_armor", "Jungle_armor",
+    "Hallowed_armor", "Chlorophyte_armor", "Turtle_armor",
+    "Beetle_armor", "Shroomite_armor", "Spectre_armor",
+    "Solar_Flare_armor", "Nebula_armor", "Vortex_armor",
+    "Stardust_armor",
+
     # NPCs
     "Guide", "Merchant", "Nurse", "Arms_Dealer", "Dryad",
     "Demolitionist", "Goblin_Tinkerer", "Wizard", "Mechanic",
@@ -44,31 +59,18 @@ NEW_PAGES = [
     "Witch_Doctor", "Pirate", "Stylist", "Angler", "Party_Girl",
     "Truffle", "Steampunker", "Cyborg", "Santa_Claus",
     "Princess", "Zoologist",
-    # Weapons
-    "Night's_Edge", "Excalibur", "True_Excalibur", "True_Night's_Edge",
-    "Death_Sickle", "Vampire_Knives", "Scourge_of_the_Corruptor",
-    "Piranha_Gun", "Snowball_Cannon", "Flamethrower",
-    "Clockwork_Assault_Rifle", "Uzi", "Chain_Gun",
-    "Golden_Shower", "Crystal_Storm", "Blizzard_Staff",
-    "Razorblade_Typhoon", "Bubble_Gun", "Nimbus_Rod",
-    "Bat_Scepter", "Terraprisma", "Phantasm",
-    "Influx_Waver", "Star_Wrath", "Tsunami",
-    # Armor
-    "Molten_armor", "Meteor_armor", "Jungle_armor",
-    "Hallowed_armor", "Chlorophyte_armor", "Turtle_armor",
-    "Beetle_armor", "Shroomite_armor", "Spectre_armor",
-    "Solar_Flare_armor", "Nebula_armor", "Vortex_armor",
-    "Stardust_armor",
-    # Biomes / Areas
-    "Underground", "Cavern", "The_Underworld", "Space",
-    "Dungeon", "Jungle", "Mushroom_biome", "Granite_Cave", "Marble_Cave",
+
+    # Events
+    "Blood_Moon", "Solar_Eclipse", "Goblin_Army",
+    "Martian_Madness", "Pumpkin_Moon", "Frost_Moon",
+    "Old_One%27s_Army", "Pirate_Invasion", "Frost_Legion",
+
     # Mechanics
+    "Hardmode", "Journey_Mode", "Terraria",
     "Crafting", "Fishing", "Mining", "Building",
     "NPC_happiness", "Buffs", "Debuffs", "Luck",
     "Torch_God", "Bestiary",
-    # Events
-    "Martian_Madness", "Pumpkin_Moon", "Frost_Moon",
-    "Old_One%27s_Army", "Pirate_Invasion", "Frost_Legion",
+
     # Accessories
     "Ankh_Shield", "Celestial_Shell", "Papyrus_Scarab",
     "Destroyer_Emblem", "Avenger_Emblem", "Mechanical_Glove",
@@ -190,7 +192,6 @@ def fetch_page(slug: str) -> Optional[dict]:
 
 
 def main():
-    # Load existing corpus to avoid re-scraping
     try:
         with open("corpus.json", "r", encoding="utf-8") as f:
             corpus = json.load(f)
@@ -201,8 +202,7 @@ def main():
         existing_ids = set()
         print("No existing corpus found, starting fresh.")
 
-    # Only scrape new pages
-    all_pages = ORIGINAL_PAGES + NEW_PAGES
+    all_pages = PAGES
     to_scrape = [p for p in all_pages if p.lower().replace("%27", "").replace("'", "") not in existing_ids]
     print(f"Scraping {len(to_scrape)} new pages from Terraria Wiki...\n")
 
